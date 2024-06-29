@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%=campground.title%></title>
-</head>
-<body>
-    <h1><%= campground.title %></h1>
-    <h3>Title: <%=campground.title%></h3>
-    <h3>Location: <%=campground.location %></h3>
-    
+<% layout('layouts/boilerplate')%>
+    <h1>
+        <%= campground.title %>
+    </h1>
+    <h3>Title: <%=campground.title%>
+    </h3>
+    <h3>Location: <%=campground.location %>
+    </h3>
+
     <footer>
         <div>
             <a href="/campgrounds/<%=campground._id%>/edit">Edit Campground</a>
@@ -23,5 +20,3 @@
             <a href="/campgrounds">All Campgrounds</a>
         </div>
     </footer>
-</body>
-</html>
