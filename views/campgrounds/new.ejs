@@ -4,30 +4,46 @@
             New Campground
         </h1>
         <div class="col-6 offset-3">
-            <form action="/campgrounds" method="POST">
+            <form action="/campgrounds" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title: </label>
-                    <input type="text" id="title" name="title" class="form-control">
+                    <input type="text" id="title" name="campground[title]" class="form-control" required>
+                    <div class="valid-feedback">
+                        Looks good
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="location" class="form-label">Location: </label>
-                    <input type="text" id="location" name="location" class="form-control">
+                    <input type="text" id="location" name="campground[location]" class="form-control" required>
+                    <div class="valid-feedback">
+                        Looks good
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="image" class="form-label">Image URL: </label>
-                    <input type="text" id="image" name="image" class="form-control">
+                    <input type="text" id="image" name="campground[image]" class="form-control" required>
+                    <div class="valid-feedback">
+                        Looks good
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Campground Price: </label>
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">$</span>
-                        <input type="text" class="form-control" placeholder="0.00" id="price" name="price">
+                        <input type="text" class="form-control" placeholder="0.00" id="price" name="campground[price]" required>
+                        <div class="valid-feedback">
+                            Looks good
+                        </div>
                     </div>
+
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description: </label>
                     <textarea class="form-control" placeholder="Leave a description here" id="description"
-                        name="description"></textarea>
+                        name="campground[description]" required></textarea>
+                    <div class="valid-feedback">
+                        Looks good
+                    </div>
                 </div>
 
                 <div class="mb-3">
