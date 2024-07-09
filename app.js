@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utilities/ExpressError');
 const campgroundSchema = require('./validation/campgroundSchema');
+const Review = require('./models/review');
 
 // connect to DB
 mongoose.connect('mongodb://127.0.0.1:27017/yelpCamp')
@@ -46,6 +47,7 @@ app.get('/', (req, res) => {
     res.render('home');
 })
 
+/***** CAMPGROUND ROUTES *****/
 // index route
 app.get('/campgrounds', async (req, res, next) => {
     try {
@@ -121,6 +123,30 @@ app.delete('/campgrounds/:id', async (req, res, next) => {
         next(err);
     }
 })
+/*****************************/
+
+
+/***** REVIEW ROUTES *****/
+// create a new reivew for the giving campground
+app.post('/campgrounds/:cid/review', async (req, res, next) => {
+    try {
+        const { cid } = req.params;
+        const campground = await Campground.findById(cid);
+        const review = new Review(req.body.review);
+        campground.reviews.push(review);
+        await campground.save();
+        await review.save();
+        res.redirect(`/campgrounds/${campground._id}`);
+        // if (!campground) {
+        //     throw new ExpressError("Campground doesn't exist", 404);
+        // }
+    } catch (err) {
+        next(err);
+    }
+    
+})
+/*************************/
+
 
 // no matching url middleware
 app.all('*', (req, res, next) => {
