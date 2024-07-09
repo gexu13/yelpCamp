@@ -93,7 +93,7 @@ app.post('/campgrounds', validateCampground, async (req, res, next) => {
 app.get('/campgrounds/:id', async (req, res, next) => {
     try {
         const { id } = req.params;
-        const campground = await Campground.findById(id);   
+        const campground = await Campground.findById(id).populate('reviews');   
         res.render('campgrounds/show', {campground});
     } catch(err) {
         next(err);
@@ -156,7 +156,6 @@ app.post('/campgrounds/:cid/reviews', validateReview, async (req, res, next) => 
     } catch (err) {
         next(err);
     }
-    
 })
 /*************************/
 
