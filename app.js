@@ -140,7 +140,7 @@ app.delete('/campgrounds/:id', async (req, res, next) => {
 
 
 /***** REVIEW ROUTES *****/
-// create a new reivew for the giving campground
+// create a new reivew for the given campground
 app.post('/campgrounds/:cid/reviews', validateReview, async (req, res, next) => {
     try {
         const { cid } = req.params;
@@ -150,13 +150,20 @@ app.post('/campgrounds/:cid/reviews', validateReview, async (req, res, next) => 
         await campground.save();
         await review.save();
         res.redirect(`/campgrounds/${campground._id}`);
-        // if (!campground) {
-        //     throw new ExpressError("Campground doesn't exist", 404);
-        // }
     } catch (err) {
         next(err);
     }
 })
+
+// delete a review for the given campground
+app.delete('/campgrounds/:cid/reviews/:rid', async (req, res, next) => {
+    const { cid , rid } = req.params;
+    const campground = await Campground.findByIdAndUpdate(cid, {$pull : {reviews: rid}});
+    const review = await Review.findByIdAndDelete(rid);
+
+    res.redirect(`/campgrounds/${cid}`);
+
+} )
 /*************************/
 
 
