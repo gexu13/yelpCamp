@@ -7,6 +7,7 @@ const ejsMate = require('ejs-mate');
 const ExpressError = require('./utilities/ExpressError');
 const campgroundSchema = require('./validation/campgroundSchema');
 const Review = require('./models/review');
+const reviewSchema = require('./validation/reviewSchema.js');
 
 // connect to DB
 mongoose.connect('mongodb://127.0.0.1:27017/yelpCamp')
@@ -31,13 +32,25 @@ app.use(methodOverride('_method'));
 
 const validateCampground = (req, res, next) => {
     
-    const { error } = campgroundSchema.validate(req.body);
+    const { error } = campgroundSchema.validate(req.body.campground);
     
     if (error) {
         const msg = error.details.map(e => e.message).join(',');
         throw new ExpressError(msg, 400);
     }
     next();
+}
+
+const validateReview = (req, res, next) => {
+
+    const { error } = reviewSchema.validate(req.body.review);
+
+    if ( error ) {
+        const msg = error.details.map(e => e.message).join(',');
+        throw new ExpressError(msg, 400);
+    }
+    next();
+    
 }
 
 /**
@@ -128,7 +141,7 @@ app.delete('/campgrounds/:id', async (req, res, next) => {
 
 /***** REVIEW ROUTES *****/
 // create a new reivew for the giving campground
-app.post('/campgrounds/:cid/review', async (req, res, next) => {
+app.post('/campgrounds/:cid/reviews', validateReview, async (req, res, next) => {
     try {
         const { cid } = req.params;
         const campground = await Campground.findById(cid);
