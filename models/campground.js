@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Review = require('./review');
 
 const CampgroundSchema = new mongoose.Schema({
     title: String,
@@ -10,6 +11,14 @@ const CampgroundSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Review',
     }]
+})
+
+CampgroundSchema.post('findOneAndDelete', async(campground) => {
+    if (campground) {
+        campground.reviews.forEach(async review => {
+            await Review.findByIdAndDelete(review);
+        });
+    }
 })
 
 const Campground = mongoose.model('Campground', CampgroundSchema);
