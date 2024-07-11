@@ -24,6 +24,9 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// serve public folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 // set up middleware
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
@@ -46,7 +49,7 @@ app.use('/campgrounds/:cid/reviews', reviewRouter);
 /*************************/
 
 
-// no matching url middleware
+// no matching url middleware(404)
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
 })
