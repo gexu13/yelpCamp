@@ -6,6 +6,7 @@ const ejsMate = require('ejs-mate');
 const ExpressError = require('./utilities/ExpressError');
 const campgroundRouter = require('./routes/campgroundRoutes.js');
 const reviewRouter = require('./routes/reviewRoutes.js');
+const session = require('express-session');
 
 // connect to DB
 mongoose.connect('mongodb://127.0.0.1:27017/yelpCamp')
@@ -30,7 +31,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 // set up middleware
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
-
+app.use(session({
+    secret: 'developmentsecret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        httpOnly: true,
+    }
+}));
 
 /**
  * RESTful routes
