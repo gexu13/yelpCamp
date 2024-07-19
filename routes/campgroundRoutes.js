@@ -3,7 +3,7 @@ const ExpressError = require('../utilities/ExpressError');
 const Campground = require('../models/campground');
 const express = require('express');
 const router = express.Router();
-
+const { requireLogin } = require('../middleware');
 
 // campgrounds middleware
 const validateCampground = (req, res, next) => {
@@ -28,12 +28,12 @@ router.get('/', async (req, res, next) => {
 })
 
 // new campground form route
-router.get('/new', (req, res) => {
+router.get('/new', requireLogin, (req, res) => {
     res.render('campgrounds/new');
 })
 
 // post route
-router.post('/', validateCampground, async (req, res, next) => {
+router.post('/', requireLogin, validateCampground, async (req, res, next) => {
     try {
         // if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
         const campground = new Campground(req.body.campground);
@@ -63,7 +63,7 @@ router.get('/:id', async (req, res, next) => {
 })
 
 // get campground edit form route
-router.get('/:id/edit', async (req, res, next) => {
+router.get('/:id/edit', requireLogin, async (req, res, next) => {
     try {
         const { id } = req.params;
         const campground = await Campground.findById(id);
@@ -79,7 +79,7 @@ router.get('/:id/edit', async (req, res, next) => {
 })
 
 // patch (update and edit) route
-router.patch('/:id', validateCampground, async (req, res, next) => {
+router.patch('/:id', requireLogin, validateCampground, async (req, res, next) => {
     try {
         const { id } = req.params;
         
@@ -93,7 +93,7 @@ router.patch('/:id', validateCampground, async (req, res, next) => {
 }) 
 
 // delete route
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', requireLogin, async (req, res, next) => {
     try {
         const { id } = req.params;
         const campground = await Campground.findByIdAndDelete(id);

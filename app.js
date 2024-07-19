@@ -11,6 +11,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user.js');
+const userRouter = require('./routes/userRoute.js');
 
 // connect to DB
 mongoose.connect('mongodb://127.0.0.1:27017/yelpCamp')
@@ -54,13 +55,21 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// configure flash
 app.use(flash());
 app.use((req, res, next) => {
+    if (!['/login', '/', '/register'].includes(req.originalUrl)) {
+        // if the request is not from ['/login', '/', '/register']
+        // store the url the user is requesting.
+        req.session.returnTo = req.originalUrl;
+    }
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
 
+// to be deleted
 app.get('/fakeuser', async (req, res) => {
     const user = new User({
         email: 'gx@gmail.com',
@@ -86,6 +95,9 @@ app.use('/campgrounds', campgroundRouter);
 app.use('/campgrounds/:cid/reviews', reviewRouter);
 /*************************/
 
+/***** AUTH ROUTES *****/
+app.use('/', userRouter);
+/*************************/
 
 // no matching url middleware(404)
 app.all('*', (req, res, next) => {
