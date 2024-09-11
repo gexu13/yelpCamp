@@ -10,7 +10,11 @@ const CampgroundSchema = new mongoose.Schema({
     reviews: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Review',
-    }]
+    }],
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 CampgroundSchema.post('findOneAndDelete', async(campground) => {
