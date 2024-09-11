@@ -36,13 +36,13 @@ exports.validateCampground = (req, res, next) => {
 
 exports.checkAuthor = async (req, res, next) => {
     const { id } = req.params;
-    const campground = await Campground.findById(id)
+    const campground = await Campground.findById(id);
     // check if the author of the campground is the current user
     if (!campground.author.equals(req.user._id)) {
-        req.flash('error', "You do not have permission!")
-        return res.redirect(`/campgrounds/${id}`)
+        req.flash('error', "You do not have permission!");
+        return res.redirect(`/campgrounds/${id}`);
     }
-    next()
+    next();
 }
 
 // reviews middleware
