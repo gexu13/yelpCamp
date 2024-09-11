@@ -2,7 +2,7 @@ const Review = require('../models/review');
 const Campground = require('../models/campground.js')
 const express = require('express');
 const router = express.Router({mergeParams: true});
-const { validateReview, requireLogin } = require('../middleware.js')
+const { validateReview, requireLogin, checkReviewAuthor } = require('../middleware.js')
 
 
 /***** REVIEW ROUTES *****/
@@ -25,7 +25,7 @@ router.post('/', requireLogin, validateReview, async (req, res, next) => {
 })
 
 // delete a review for the given campground
-router.delete('/:rid', requireLogin, async (req, res, next) => {
+router.delete('/:rid', requireLogin, checkReviewAuthor, async (req, res, next) => {
     const { cid , rid } = req.params;
     const campground = await Campground.findByIdAndUpdate(cid, {$pull : {reviews: rid}});
     const review = await Review.findByIdAndDelete(rid);

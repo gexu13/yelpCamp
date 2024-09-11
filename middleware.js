@@ -1,6 +1,7 @@
 const ExpressError = require('./utilities/ExpressError')
 const campgroundSchema = require('./validation/campgroundSchema')
 const Campground = require('./models/campground')
+const Review = require('./models/review')
 const reviewSchema = require('./models/review')
 
 exports.requireLogin = (req, res, next) => {
@@ -56,4 +57,15 @@ exports.validateReview = (req, res, next) => {
     }
     next();
     
+}
+
+exports.checkReviewAuthor = async (req, res, next) => {
+    const { cid, rid } = req.params;
+    const review = await Review.findById(rid);
+    // check if the author of the review is the current user
+    if (!review.author.equals(req.user._id)) {
+        req.flash('error', "You do not have permission!");
+        return res.redirect(`/campgrounds/${cid}`);
+    }
+    next();
 }
