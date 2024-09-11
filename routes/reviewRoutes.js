@@ -1,21 +1,9 @@
-const reviewSchema = require('../validation/reviewSchema.js');
 const Review = require('../models/review');
 const Campground = require('../models/campground.js')
-const ExpressError = require('../utilities/ExpressError');
 const express = require('express');
 const router = express.Router({mergeParams: true});
+const { validateReview } = require('../middleware.js')
 
-const validateReview = (req, res, next) => {
-
-    const { error } = reviewSchema.validate(req.body);
-
-    if ( error ) {
-        const msg = error.details.map(e => e.message).join(',');
-        throw new ExpressError(msg, 400);
-    }
-    next();
-    
-}
 
 /***** REVIEW ROUTES *****/
 // create a new reivew for the given campground

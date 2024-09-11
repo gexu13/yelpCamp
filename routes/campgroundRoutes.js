@@ -1,32 +1,8 @@
-const campgroundSchema = require('../validation/campgroundSchema');
-const ExpressError = require('../utilities/ExpressError');
 const Campground = require('../models/campground');
 const express = require('express');
 const router = express.Router();
-const { requireLogin } = require('../middleware');
+const { requireLogin, validateCampground, checkAuthor } = require('../middleware');
 
-// campgrounds middleware
-const validateCampground = (req, res, next) => {
-
-    const { error } = campgroundSchema.validate(req.body);
-    
-    if (error) {
-        const msg = error.details.map(e => e.message).join(',');
-        throw new ExpressError(msg, 400);
-    }
-    next();
-}
-
-const checkAuthor = async (req, res, next) => {
-    const { id } = req.params;
-    const campground = await Campground.findById(id)
-    // check if the author of the campground is the current user
-    if (!campground.author.equals(req.user._id)) {
-        req.flash('error', "You do not have permission!")
-        return res.redirect(`/campgrounds/${id}`)
-    }
-    next()
-}
 
 /***** CAMPGROUND ROUTES *****/
 // index route
