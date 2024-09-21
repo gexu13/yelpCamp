@@ -19,6 +19,12 @@ exports.postNewCampground = async (req, res, next) => {
         const campground = new Campground(req.body.campground);
         // set the current user as the author of the new campground
         campground.author = req.user._id;
+        // add images info to the campground
+        const images = req.files.map(e => ({
+            url : e.path, 
+            filename: e.filename
+        }));
+        campground.images = images
         await campground.save();
         req.flash('success', 'Successfully made a new campground!');
         res.redirect(`/campgrounds/${campground._id}`);

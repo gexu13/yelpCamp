@@ -14,13 +14,10 @@ router.get('/', campgrounds.index)
 router.get('/new', requireLogin, campgrounds.getNewForm)
 
 // post route
-// router.post('/', requireLogin, validateCampground, campgrounds.postNewCampground)
-router.post('/', upload.array('image'), (req, res) => {
-    console.log(req.body)
-    console.log(req.files)
-    res.send('It worked!')
-})
-
+router.post('/', requireLogin, 
+                 upload.array('image'), 
+                 validateCampground, 
+                 campgrounds.postNewCampground)
 
 // show route
 router.get('/:id', campgrounds.showCampground)
