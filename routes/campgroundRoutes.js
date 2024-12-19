@@ -26,7 +26,11 @@ router.get('/:id', campgrounds.showCampground)
 router.get('/:id/edit', requireLogin, checkAuthor, campgrounds.getEditForm)
 
 // patch (update and edit) route
-router.patch('/:id', requireLogin, checkAuthor, validateCampground, campgrounds.updateCampground) 
+router.patch('/:id', requireLogin, 
+                     checkAuthor, 
+                     upload.array('image'), 
+                     validateCampground, 
+                     campgrounds.updateCampground) 
 
 // delete route
 router.delete('/:id', requireLogin, checkAuthor, campgrounds.deleteCampground)
