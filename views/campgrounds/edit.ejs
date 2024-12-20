@@ -42,10 +42,23 @@
                         Looks good
                     </div>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="image" class="form-label">Add image(s):</label>
                     <input class="form-control" type="file" id="image" name="image" multiple>
+                </div>
+
+                <div class="mb-3">
+                    <% for(let i = 0; i < campground.images.length; i++) { %>
+                        <img src="<%=campground.images[i].url%>" alt="campground image" class="img-thumbnail">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="<%=campground.images[i].filename%>" 
+                                id="image-<%=i%>" name="deleteImages[]">
+                            <label class="form-check-label" for="image-<%=i%>">
+                              Delete Image
+                            </label>
+                          </div>
+                    <% } %>
                 </div>
 
                 <div class="mb-3 ">
