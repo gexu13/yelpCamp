@@ -1,6 +1,7 @@
 const Campground = require('../models/campground')
 const cloudinary = require('cloudinary').v2;
-
+const maptilerToken = process.env.maptiler_apiKey
+const axios = require('axios');
 
 exports.index = async (req, res, next) => {
     try {
@@ -17,8 +18,15 @@ exports.getNewForm = (req, res) => {
 
 exports.postNewCampground = async (req, res, next) => {
     try {
+        // get the location from the form and use it to get the geo data
+        const location = req.body.campground.location;
+        const url = `https://api.maptiler.com/geocoding/${location}.json?key=${maptilerToken}`;
+        const geoData = await axios.get(url);
+        geometry = geoData.data.features[0].geometry; // [lng, lat]
         // if (!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
         const campground = new Campground(req.body.campground);
+        // add the geometry data to the campground
+        campground.geometry = geometry;
         // set the current user as the author of the new campground
         campground.author = req.user._id;
         // add images info to the campground
@@ -28,6 +36,7 @@ exports.postNewCampground = async (req, res, next) => {
         }));
         campground.images = images
         await campground.save();
+        console.log(campground.geometry);
         req.flash('success', 'Successfully made a new campground!');
         res.redirect(`/campgrounds/${campground._id}`);
     } catch(err) {
