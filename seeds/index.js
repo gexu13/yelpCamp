@@ -26,7 +26,7 @@ const generateIndex = (array) => {
 const seedDB = async function() {
     await Campground.deleteMany({}); // clear the campground collection
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 200; i++) {
         const random1000 = Math.floor(Math.random() * 1000); // 0 - 999
         const price = Math.floor(Math.random() * 20) + 10;
         const camp = new Campground({
@@ -44,7 +44,7 @@ const seedDB = async function() {
             ],
             geometry: {
                 type: 'Point',
-                coordinates: [ -79.38393473625182, 43.65348193799568 ]
+                coordinates: [ cities[random1000].longitude, cities[random1000].latitude ]
             },  
             description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Possimus ratione doloremque quasi sequi enim voluptates voluptatem hic quam, nam eaque, animi facilis maiores. Et quaerat necessitatibus laborum voluptates autem? Incidunt!',
             price: price,
