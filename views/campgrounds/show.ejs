@@ -1,10 +1,7 @@
 <% layout('layouts/boilerplate')%>
     <link rel="stylesheet" href="/css/stars.css">
     <div class="row">
-        <div class="col-6">
-
-            <div id="map"></div>
-
+        <div class="col-md-6">
             <div id="campgroundCarousel" class="carousel slide">
                 <div class="carousel-inner">
                     <% for (let i = 0; i < campground.images.length; i++) {%>
@@ -59,10 +56,11 @@
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-md-6">
+            <div id="map" class="mb-2"></div>
             <div>
                 <% if(currentUser) { %>
-                <h2>Leave a review</h2>
+                <h2 class="my-2">Leave a review</h2>
                 <form action="/campgrounds/<%= campground._id %>/reviews" class="mb-3 validated-form" method="POST" novalidate>
                     <div>
                         <fieldset class="starability-basic">
