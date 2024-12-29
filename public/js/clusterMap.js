@@ -1,6 +1,6 @@
 maptilersdk.config.apiKey = mapToken;
     const map = new maptilersdk.Map({
-        container: 'map',
+        container: 'cluster-map',
         zoom: 2.5,
         center: [-103.59179687498357, 40.66995747013945],
         style: maptilersdk.MapStyle.DATAVIZ.STREETS
