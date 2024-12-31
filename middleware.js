@@ -2,7 +2,7 @@ const ExpressError = require('./utilities/ExpressError')
 const campgroundSchema = require('./validation/campgroundSchema')
 const Campground = require('./models/campground')
 const Review = require('./models/review')
-const reviewSchema = require('./models/review')
+const reviewSchema = require('./validation/reviewSchema')
 
 exports.requireLogin = (req, res, next) => {
     // console.log("isAuthenticate ? " + req.isAuthenticated());
