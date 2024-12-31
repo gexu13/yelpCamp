@@ -21,10 +21,9 @@ const helmet = require('helmet');
 const MongoStore = require('connect-mongo');
 
 
-const cloudDB = process.env.MONGODB_URL;
-const localDB = 'mongodb://127.0.0.1:27017/yelpCamp'
+const mongoDBUrl = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/yelpCamp';
 // connect to local mongoDB
-mongoose.connect(localDB)
+mongoose.connect(mongoDBUrl)
 .then(() => {
     console.log("Connected to the Database!");
 })
@@ -48,13 +47,14 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 
 
+const secret = process.env.SECRET || 'developmentscret';
 // set up session
 app.use(session({
-    store: MongoStore.create({ mongoUrl: localDB }),
+    store: MongoStore.create({ mongoUrl: mongoDBUrl }),
     touchAfter: 24 * 3600, // time period in seconds
     name: "session",
     // secure: true,
-    secret: 'developmentsecret',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -178,7 +178,8 @@ app.use((err, req, res, next) => {
     // res.send('oh boy, something happened!');
 })
 
-app.listen(3000, () => {
-    console.log('APP IS LISTENING ON PORT 3000!');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`APP IS LISTENING ON PORT ${port}!`);
 })
 
