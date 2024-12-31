@@ -18,9 +18,13 @@ const User = require('./models/user.js');
 const userRouter = require('./routes/userRoute.js');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+const MongoStore = require('connect-mongo');
 
-// connect to DB
-mongoose.connect('mongodb://127.0.0.1:27017/yelpCamp')
+
+const cloudDB = process.env.MONGODB_URL;
+const localDB = 'mongodb://127.0.0.1:27017/yelpCamp'
+// connect to local mongoDB
+mongoose.connect(localDB)
 .then(() => {
     console.log("Connected to the Database!");
 })
@@ -42,9 +46,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 // set up middleware
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
+
+
+// set up session
 app.use(session({
+    store: MongoStore.create({ mongoUrl: localDB }),
+    touchAfter: 24 * 3600, // time period in seconds
     name: "session",
-    secure: true,
+    // secure: true,
     secret: 'developmentsecret',
     resave: false,
     saveUninitialized: true,
