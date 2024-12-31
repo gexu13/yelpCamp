@@ -42,6 +42,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(session({
+    name: "session",
+    secure: true,
     secret: 'developmentsecret',
     resave: false,
     saveUninitialized: true,
