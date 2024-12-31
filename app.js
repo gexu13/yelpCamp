@@ -16,6 +16,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user.js');
 const userRouter = require('./routes/userRoute.js');
+const mongoSanitize = require('express-mongo-sanitize');
 
 // connect to DB
 mongoose.connect('mongodb://127.0.0.1:27017/yelpCamp')
@@ -50,6 +51,9 @@ app.use(session({
         httpOnly: true,
     }
 }));
+
+// sanitize user input to prevent mongo injection
+app.use(mongoSanitize());
 
 // configure passport
 app.use(passport.initialize());
